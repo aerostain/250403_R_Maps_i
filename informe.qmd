@@ -1,0 +1,90 @@
+---
+title: "Muestra de widgets"
+author: "R1ck7"
+format:
+  html:
+    toc:  true
+    toc-location: left
+---
+# Widget's R
+
+### Librerías y directorios
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+
+# LoadLibrary
+library(tidyverse)
+library(magrittr)
+library(haven)
+library(leaflet)
+library(terra)
+library(raster)
+library(janitor)
+library(sf)
+
+```
+
+### Creación de base de datos
+```{r}
+cong_urb <- file.path("E:\\BackUp SSD Acer\\Mapas\\QGis_ENAHOgeoserver\\ConglomeradoUrbano.shp")
+cong_rur <- file.path("E:\\BackUp SSD Acer\\Mapas\\QGis_ENAHOgeoserver\\ConglomeradoRural.shp")
+db_urb <- read_sf(cong_urb)
+db_rur <- read_sf(cong_rur)
+# Base de datos: Conglomerados Urbanos
+db_urb %>% glimpse()
+# Base de datos: Conglomerados Rurales
+db_rur %>% glimpse()
+```
+
+### Mostrar en Mapa
+#### Conglomerados Urbanos
+
+```{r}
+db_urb %>% head()
+```
+```{r}
+leaflet() %>%
+  addProviderTiles(as.character(providers[152])) %>%
+  addPolygons(
+    data = db_urb,
+    color = "orange",
+    popup = ~ paste0("<b>", NOMCCPP, "</b><hr>", CODDIST)
+  )  
+```
+
+#### Conglomerados Rurales
+```{r}
+db_rur %>% head()
+```
+
+```{r}
+db_rur %>%
+  group_by(MES) %>%
+  summarise(n = n())
+```
+
+```{r}
+leaflet() %>%
+  addProviderTiles(as.character(providers[152])) %>%
+  addPolygons(
+    data = db_rur %>% filter(MES %in% c("01", "02", "03", "04")),
+    color = "purple",
+    popup = ~ paste0("<b>", CONGLOME, "</b><hr>", MES)
+  ) %>%
+  addPolygons(
+    data = db_rur %>% filter(MES %in% c("05", "06", "07", "08")),
+    color = "blue",
+    popup = ~ paste0("<b>", CONGLOME, "</b><hr>", MES)
+  ) %>%
+  addPolygons(
+    data = db_rur %>% filter(MES %in% c("09", "10", "11", "12")),
+    color = "green",
+    popup = ~ paste0("<b>", CONGLOME, "</b><hr>", MES)
+  )
+
+```
+
+## FIN
