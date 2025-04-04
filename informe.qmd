@@ -24,7 +24,6 @@ library(terra)
 library(raster)
 library(janitor)
 library(sf)
-
 ```
 
 ### Creación de base de datos
@@ -38,7 +37,6 @@ db_urb %>% glimpse()
 # Base de datos: Conglomerados Rurales
 db_rur %>% glimpse()
 ```
-
 ### Mostrar en Mapa
 #### Conglomerados Urbanos
 
@@ -84,7 +82,6 @@ leaflet() %>%
     color = "green",
     popup = ~ paste0("<b>", CONGLOME, "</b><hr>", MES)
   )
-
 ```
 
-## FIN
+## Fin
